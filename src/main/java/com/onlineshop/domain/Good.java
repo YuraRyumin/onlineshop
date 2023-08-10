@@ -9,6 +9,9 @@ public class Good {
     @GeneratedValue
     private Long id;
 
+    @Column(name = "uuid")
+    private String uuid;
+
     @Column(name = "name")
     private String name;
 
@@ -44,7 +47,8 @@ public class Good {
     public Good() {
     }
 
-    public Good(String name, Company producer, Color color, String description, String shortDescription, Integer height, Integer width, Integer length, Float weight, Float price) {
+    public Good(String uuid, String name, Company producer, Color color, String description, String shortDescription, Integer height, Integer width, Integer length, Float weight, Float price) {
+        this.uuid = uuid;
         this.name = name;
         this.producer = producer;
         this.color = color;
@@ -143,5 +147,13 @@ public class Good {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }
