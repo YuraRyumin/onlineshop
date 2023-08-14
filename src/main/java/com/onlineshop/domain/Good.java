@@ -15,12 +15,12 @@ public class Good {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name = "producer")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "producer")
     private Company producer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name = "color")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "color")
     private Color color;
 
     @Column(name = "description")

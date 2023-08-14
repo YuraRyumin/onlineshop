@@ -9,12 +9,12 @@ public class Bucket {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name = "user")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name = "good")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "good")
     private Good good;
 
     @Column(name = "quantity")

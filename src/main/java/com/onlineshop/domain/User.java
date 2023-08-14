@@ -24,8 +24,8 @@ public class User implements UserDetails {
     @Column(name = "phone")
     private String phone;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name = "role")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role")
     private Role role;
 
     @Column(name = "login")
