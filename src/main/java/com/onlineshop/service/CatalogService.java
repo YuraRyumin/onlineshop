@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -41,5 +42,26 @@ public class CatalogService {
     public Iterable<CatalogDTO> convertAllEntityToDTO(Iterable<Catalog> catalogs){
         return StreamSupport.stream(catalogs.spliterator(), false).
                 map(this::convertEntityToDTO).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void saveCatalog(Catalog catalog){
+        catalogRepo.save(catalog);
+    }
+
+    @Transactional
+    public void saveCatalog(String uuidParent, String uuid, String name){
+        Catalog catalog = new Catalog();
+        Catalog parent = catalogRepo.findFirstByUuid(uuidParent);
+        if(parent != null){
+            catalog.setParent(parent);
+        }
+        if(uuid.isEmpty()){
+            catalog.setUuid(UUID.randomUUID().toString());
+        } else {
+            catalog.setUuid(uuid);
+        }
+        catalog.setName(name);
+        catalogRepo.save(catalog);
     }
 }

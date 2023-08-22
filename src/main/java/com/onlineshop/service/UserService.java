@@ -1,5 +1,6 @@
 package com.onlineshop.service;
 
+import com.onlineshop.domain.Role;
 import com.onlineshop.domain.User;
 import com.onlineshop.dto.RoleDTO;
 import com.onlineshop.dto.UserDTO;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -62,8 +64,26 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void saveUser(){
+    public void saveUser(String uuid, String email,
+                         String phone, String roleName,
+                         String login, String password,
+                         String activationCode){
         User user = new User();
+        user.setUuid(uuid);
+        user.setEmail(email);
+        user.setPhone(phone);
+        Role role = roleRepo.findFirstByName(roleName);
+        if(role != null){
+            user.setRole(role);
+        }
+        user.setLogin(login);
+        user.setActive(false);
+        if(activationCode.isEmpty()){
+            user.setActivationCode(UUID.randomUUID().toString());
+        } else {
+            user.setActivationCode(activationCode);
+        }
+        userRepo.save(user);
     }
 
     @Override

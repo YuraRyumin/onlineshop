@@ -1,5 +1,7 @@
 package com.onlineshop.service;
 
+import com.onlineshop.domain.Color;
+import com.onlineshop.domain.Company;
 import com.onlineshop.domain.Good;
 import com.onlineshop.dto.GoodDTO;
 import com.onlineshop.repository.ColorRepo;
@@ -87,6 +89,33 @@ public class GoodService {
 
     @Transactional
     public void saveGood(Good good){
+        goodRepo.save(good);
+    }
+
+    @Transactional
+    public void saveGood(String uuid, String name,
+                         String producerName, String colorName,
+                         String description, String shortDescription,
+                         Integer height, Integer width,
+                         Integer length, Float weight,
+                         Float price){
+        Good good = new Good();
+        good.setUuid(uuid);
+        good.setName(name);
+        Color color = colorRepo.findFirstByName(colorName);
+        if(color != null){
+            good.setColor(color);
+        }
+        Company company = companyRepo.findFirstByName(producerName);
+        if(company != null){
+            good.setProducer(company);
+        }
+        good.setDescription(description);
+        good.setShortDescription(shortDescription);
+        good.setHeight(height);
+        good.setWidth(width);
+        good.setLength(length);
+        good.setPrice(price);
         goodRepo.save(good);
     }
 }
