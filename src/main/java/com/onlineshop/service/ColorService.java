@@ -46,13 +46,25 @@ public class ColorService {
         return convertEntityToDTO(colorRepo.findFirstByName(name));
     }
 
+    public Color getColorEntityByName(String name){
+        return colorRepo.findFirstByName(name);
+    }
+
     public Iterable<ColorDTO> getAllColors(){
         return convertAllEntityToDTO(colorRepo.findAll());
     }
 
     @Transactional
     public void saveColor(Color color){
-        colorRepo.save(color);
+        Color thisColor = colorRepo.findFirstByName(color.getName());
+        if(thisColor == null){
+            thisColor = new Color(color.getName());
+        } else {
+            if(!thisColor.getName().equals(color.getName())){
+                thisColor.setName(color.getName());
+            }
+        }
+        colorRepo.save(thisColor);
     }
 
     @Transactional

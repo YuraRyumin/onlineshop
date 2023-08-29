@@ -52,7 +52,12 @@ public class CompanyService {
 
     @Transactional
     public void saveCompany(Company company){
-        companyRepo.save(company);
+        Company thisCompany = companyRepo.findFirstByName(company.getName());
+        if(thisCompany == null){
+            thisCompany = new Company();
+        }
+        thisCompany.setAddress(company.getAddress());
+        companyRepo.save(thisCompany);
     }
 
     @Transactional

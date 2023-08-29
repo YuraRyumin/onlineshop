@@ -15,13 +15,13 @@ public class Good {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "producer")
     private Company producer;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "color")
-    private Color color;
+    //@ManyToOne(fetch = FetchType.EAGER)
+    //@JoinColumn(name = "id_color")
+    //private Color mainColor;
 
     @Column(name = "description")
     private String description;
@@ -44,14 +44,18 @@ public class Good {
     @Column(name = "price")
     private Float price;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "catalog")
+    private Catalog catalog;
+
     public Good() {
     }
 
-    public Good(String uuid, String name, Company producer, Color color, String description, String shortDescription, Integer height, Integer width, Integer length, Float weight, Float price) {
+    public Good(String uuid, String name, Company producer, Color color, String description, String shortDescription, Integer height, Integer width, Integer length, Float weight, Float price, Catalog catalog) {
         this.uuid = uuid;
         this.name = name;
         this.producer = producer;
-        this.color = color;
+        //this.mainColor = color;
         this.description = description;
         this.shortDescription = shortDescription;
         this.height = height;
@@ -59,6 +63,7 @@ public class Good {
         this.length = length;
         this.weight = weight;
         this.price = price;
+        this.catalog = catalog;
     }
 
     public Long getId() {
@@ -85,13 +90,13 @@ public class Good {
         this.producer = producer;
     }
 
-    public Color getColor() {
-        return color;
-    }
+//    public Color getColor() {
+//        return mainColor;
+//    }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
+//    public void setColor(Color color) {
+//        this.mainColor = color;
+//    }
 
     public String getDescription() {
         return description;

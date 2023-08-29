@@ -45,6 +45,10 @@ public class RoleService {
         return convertEntityToDTO(roleRepo.findFirstByName(name));
     }
 
+    public Role getRoleEntityByName(String name){
+        return roleRepo.findFirstByName(name);
+    }
+
     public Iterable<RoleDTO> getAllRoles(){
         return convertAllEntitysToDTO(roleRepo.findAll());
     }

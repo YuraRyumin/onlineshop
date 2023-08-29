@@ -60,7 +60,27 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void saveUser(User user){
-        userRepo.save(user);
+        User thisUser = userRepo.findFirstByUuid(user.getUuid());
+        if(thisUser == null){
+            thisUser = new User();
+        }
+        thisUser.setUuid(user.getUuid());
+        thisUser.setEmail(user.getEmail());
+        thisUser.setPhone(user.getPhone());
+        if(user.getRole() != null) {
+            Role role = roleRepo.findFirstByName(user.getRole().getName());
+            if (role != null) {
+                thisUser.setRole(role);
+            }
+        }
+        thisUser.setLogin(user.getLogin());
+        thisUser.setActive(false);
+        if(user.getActivationCode().isEmpty()){
+            thisUser.setActivationCode(UUID.randomUUID().toString());
+        } else {
+            thisUser.setActivationCode(user.getActivationCode());
+        }
+        userRepo.save(thisUser);
     }
 
     @Transactional

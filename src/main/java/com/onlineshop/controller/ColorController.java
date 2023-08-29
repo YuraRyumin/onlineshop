@@ -5,6 +5,7 @@ import com.onlineshop.dto.ColorDTO;
 import com.onlineshop.service.ColorService;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ColorController {
     private final ColorService colorService;
@@ -13,13 +14,18 @@ public class ColorController {
         this.colorService = colorService;
     }
 
-    @GetMapping("/colors")
+    @GetMapping("/colorslist")
     public Iterable<ColorDTO> listOfColors(){
         return colorService.getAllColors();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/createcolor")
     public void createColor(@RequestBody Color color){
+        colorService.saveColor(color);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/savecolor")
+    public void saveColor(@RequestBody Color color){
         colorService.saveColor(color);
     }
 }

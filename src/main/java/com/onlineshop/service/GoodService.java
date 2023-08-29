@@ -47,11 +47,11 @@ public class GoodService {
         GoodDTO goodDTO = new GoodDTO();
         goodDTO.setId(good.getId());
         goodDTO.setName(good.getName());
-        if(good.getColor() == null){
-            goodDTO.setColor("");
-        } else {
-            goodDTO.setColor(good.getColor().getName());
-        }
+//        if(good.getColor() == null){
+//            goodDTO.setColor("");
+//        } else {
+//            goodDTO.setColor(good.getColor().getName());
+//        }
         goodDTO.setDescription(good.getDescription());
         goodDTO.setShortDescription(good.getShortDescription());
         if(good.getProducer() == null){
@@ -89,7 +89,25 @@ public class GoodService {
 
     @Transactional
     public void saveGood(Good good){
-        goodRepo.save(good);
+        Good thisGood = goodRepo.findFirstByUuid(good.getUuid());
+        if(thisGood == null){
+            thisGood = new Good();
+        }
+        thisGood.setName(good.getName());
+        if(good.getProducer() != null) {
+            Company company = companyRepo.findFirstByName(good.getProducer().getName());
+            if (company != null) {
+                thisGood.setProducer(company);
+            }
+        }
+        thisGood.setDescription(good.getDescription());
+        thisGood.setShortDescription(good.getShortDescription());
+        thisGood.setWidth(good.getWidth());
+        thisGood.setLength(good.getLength());
+        thisGood.setHeight(good.getHeight());
+        thisGood.setWeight(good.getWeight());
+        thisGood.setPrice(good.getPrice());
+        goodRepo.save(thisGood);
     }
 
     @Transactional
@@ -104,7 +122,7 @@ public class GoodService {
         good.setName(name);
         Color color = colorRepo.findFirstByName(colorName);
         if(color != null){
-            good.setColor(color);
+            //good.setColor(color);
         }
         Company company = companyRepo.findFirstByName(producerName);
         if(company != null){

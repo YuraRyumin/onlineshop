@@ -5,6 +5,7 @@ import com.onlineshop.dto.RoleDTO;
 import com.onlineshop.service.RoleService;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class RoleController {
     private final RoleService roleService;
@@ -13,7 +14,7 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/roles")
+    @GetMapping("/roleslist")
     public Iterable<RoleDTO> listOfRoles(){
         return roleService.getAllRoles();
     }
@@ -21,5 +22,11 @@ public class RoleController {
     @RequestMapping(method = RequestMethod.POST, value = "/createrole")
     public void createRole(@RequestBody Role role){
         roleService.saveRole(role);
+    }
+
+    @PostMapping("/saverole")
+    public void saveRole(@RequestBody Role role){
+        Role thisRole = roleService.getRoleEntityByName(role.getName());
+        //roleService.saveRole(thisRole);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 
@@ -38,12 +41,18 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //.cors().disable()
-                //.csrf().disable()
-                .authorizeHttpRequests((authz) -> authz
-                        .anyRequest().permitAll()//authenticated()
-                )
-                .httpBasic(Customizer.withDefaults());
+//                .cors().disable()
+//                .csrf().disable()
+//                .authorizeHttpRequests((authorize) -> authorize
+//                        .anyRequest().permitAll()//authenticated()
+//                )
+//                .httpBasic(Customizer.withDefaults());
+
+//                .authorizeRequests()
+//                .anyRequest().permitAll();
+                .authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest()
+                        .permitAll())
+                .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
@@ -57,5 +66,15 @@ public class WebSecurityConfig {
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
         //users.createUser(user);
         return users;
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**");
+            }
+        };
     }
 }

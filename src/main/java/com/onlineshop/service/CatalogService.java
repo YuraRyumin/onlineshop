@@ -46,7 +46,13 @@ public class CatalogService {
 
     @Transactional
     public void saveCatalog(Catalog catalog){
-        catalogRepo.save(catalog);
+        Catalog thisCatalog = catalogRepo.findFirstByUuid(catalog.getUuid());
+        if(thisCatalog != null){
+            thisCatalog = new Catalog();
+        }
+        thisCatalog.setName(catalog.getName());
+        thisCatalog.setParent(catalog.getParent());
+        catalogRepo.save(thisCatalog);
     }
 
     @Transactional
@@ -63,5 +69,9 @@ public class CatalogService {
         }
         catalog.setName(name);
         catalogRepo.save(catalog);
+    }
+
+    public Iterable<CatalogDTO> getAllCatalogs(){
+        return convertAllEntityToDTO(catalogRepo.findAll());
     }
 }
